@@ -179,9 +179,49 @@ Func _Exit()
 EndFunc 
 
 Func _CalcExten()
+   $IPaddr1 = @IPAddress1
+   $IPaddr2 = @IPAddress2
+   $IPaddr3 = @IPAddress3
+   $IPaddr4 = @IPAddress4
+   $IPaddr = ""
+   $OctetsIP = ""
+   $CompN = ""
+   
    $CName = @ComputerName
    $Octet = StringMid($CName, 3, 3)
+   
+   If $IPaddr4 = "0.0.0.0" Then
+	If $IPaddr3 = "0.0.0.0" Then
+		If $IPaddr2 = "0.0.0.0" Then
+			If ($IPaddr1 = "0.0.0.0") Or ($IPaddr1 = "127.0.0.1") Then
+				MsgBox(64, "SOLARIS", "Ошибка IP-адреса. Проверьте настройки сетевой карты")
+				_Exit()
+			Else 
+				$IPaddr = $IPaddr1
+			EndIf
+		Else 
+			$IPaddr = $IPaddr2
+		EndIf
+	Else
+		$IPaddr = $IPaddr3
+	EndIf
+   Else
+	$IPaddr = $IPaddr4
+   EndIf
+   
+   ;MsgBox(64, "SOLARIS", $IPaddr)
+   $OctetsIP = StringSplit($IPaddr, ".")
+   ;_ArrayDisplay($OctetsIP, 'Октеты')
 
+   $CompN = "FL" & StringFormat("%03i", $OctetsIP[3]) & StringFormat("%03i", $OctetsIP[4])
+
+   ;MsgBox(64, "SOLARIS", $CompN)
+   
+   If $CompN <> $CName Then
+	MsgBox(64, "SOLARIS", "Имя компьютера не соответствует IP-адресу. Обратитесь к специалистам технической поддержки!")
+    _Exit()
+   EndIf
+   
    Select 
    Case $Octet >= 100 AND $Octet <= 103 
 	  $Numb = (StringMid($CName, 5, 1)*300 + StringMid($CName, 6, 3))
