@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="2.5.20020.0" SchemaVersion="1.1.0.0" TerminateOnUnhandledError="false" DeleteOnExit="false" DeleteWorkLogOnExit="false" DeleteContactsOnExit="false" WelcomeMessage="" UploadInterval="10" xmlns="http://avaya.com/OneXAgent/Settings">
+  <Login ReadOnly="false">
+    <Telephony ReadOnly="false">
+      <Server ReadOnly="false" MaximumAttempts="2">
+        <DialingRules OutsideLineAccessNumber="" CountryCode="" AreaCode="" LongDistancePrefix="" InternationalPrefix="" InternalExtensionLength="" NationalCallLength="" IncludeAreaCityCode="false" IncludeLongDistancePrefix="false" DisplayDialingWindow="false" AccountCode="" SendonLocalCalls="false" SendonLongDistanceCalls="false" SendonInternationalCalls="false" CommaCharPauseValue="2" EnableAuthCode="false" ReadOnly="false" />
+        <CallServerAddress1 ReadOnly="false" Value="192.168.161.6" />
+        <CallServerAddresses ReadOnly="false" />
+      </Server>
+      <User ReadOnly="false" Station="1300" Password="" SavePassword="false" AutoLogin="false" LoginOverride="false" AutoAnswerSupportRequired="true" LicenseType="Agent" />
+      <Type ReadOnly="false" Mode="MyComputer" SelectedPhoneNumberId="" />
+      <License Type="Agent" ReadOnly="false" />
+      <PhoneNumbers ReadOnly="false" />
+    </Telephony>
+    <Agent Login="" Password="" AutoLogin="false" Disabled="false" SavePassword="true" ReadOnly="false" EnterAuxOnLogin="true" />
+    <Im ReadOnly="false">
+      <Server ReadOnly="false" Enabled="false" ServerAddress1="" />
+      <User ReadOnly="false" LoginId="" Password="" Domain="" AutoLogin="false" SavePassword="false" />
+    </Im>
+  </Login>
+  <WorkHandling ReadOnly="false">
+    <In ReadOnly="true" AutoIn="true" />
+    <Accept AutoAccept="true" ReadOnly="false" />
+    <Complete AutoComplete="true" ReadOnly="true">
+      <FollowUp IsTimedFollowUp="true" ReadOnly="false">
+        <TimedFollowUp TimerPeriod="10" AllowExtension="false" ReadOnly="false" />
+      </FollowUp>
+    </Complete>
+    <Hold AutoHold="false" ReadOnly="false" />
+    <Ready AutoReady="true" ReadOnly="false" ReasonCode="10" />
+    <Transfer Consult="false" ReadOnly="false" />
+    <Conference Consult="false" ReadOnly="false" />
+  </WorkHandling>
+  <ContactLog DaysToKeepLog="5" ContactLogPerScreen="25" ReadOnly="false">
+    <Voice LogIncoming="true" LogOutgoing="true" />
+    <Im LogIncoming="true" LogOutgoing="true" SaveIncomingTranscript="true" SaveOutgoingTranscript="true" />
+    <Tty LogIncoming="true" LogOutgoing="true" SaveIncomingTranscript="true" SaveOutgoingTranscript="true" />
+  </ContactLog>
+  <Video>
+    <Basic ReadOnly="false" CloseWindowAfterEveryCall="false" OpenWindowOnLogin="false" EnableVideoCall="true" BroadcastVideoAuto="false" AllowVideoFilePlay="true" />
+    <Advanced ReadOnly="false" AudioBufferSize="20" PerformanceMode="MotionSmoothness" CpuPriority="Balanced" />
+  </Video>
+  <Im ReadOnly="false">
+    <Permissions AllowIMToNonContacts="true" ReadOnly="false" />
+    <Greeting Text="Hello" ReadOnly="false" />
+    <IdleTime ReadOnly="false" Time="15" />
+  </Im>
+  <Tty ReadOnly="false">
+    <Greeting Text="Hello, GA" ReadOnly="false" />
+  </Tty>
+  <Directory ReadOnly="false" />
+  <OutlookContact Password="" TimeOut="30" ReadOnly="false" />
+  <Logging ReadOnly="false" Appender="LocalLogging_GeneralFormat" LogLevel="DEBUG" CentralLoggingHost="" DaysToKeepLog="30" />
+  <VoiceMail ReadOnly="false" EnableMessageAccess="false" Action="Dial" PhoneNumber="" Path="" Url="" />
+  <LaunchApplication ReadOnly="false" />
+  <Profile ReadOnly="false" />
+  <ClickToDial ReadOnly="false" Active="false" />
+  <DesktopSharing ReadOnly="false" Enabled="true" />
+</Settings>

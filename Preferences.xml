@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<Preferences xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="2.5.20020.0" xmlns="http://avaya.com/OneXAgent/ObjectModel/Preferences">
+  <Contacts ReadOnly="false" />
+  <GeneralUI ReadOnly="false" MainWindowOnTop="false" ToolTip="true" DialPadLetters="true" SystemTrayShortcut="true" SaveWindowPreference="false" DisplayFavoritesToolBar="false" StartMinimized="false" ShowPhoneDisplay="false">
+    <Window ReadOnly="false" Docked="false" Expanded="false" Open="false" PositionLeft="NaN" PositionTop="NaN" Type="Left" Id="LoginWin" />
+    <Window ReadOnly="false" Docked="false" Expanded="false" Open="false" PositionLeft="NaN" PositionTop="NaN" Type="Left" Id="LoginAgentWin" />
+    <Window ReadOnly="false" Docked="false" Expanded="false" Open="false" PositionLeft="NaN" PositionTop="NaN" Type="Left" Id="DialpadWin" />
+    <Window ReadOnly="false" Docked="false" Expanded="false" Open="false" PositionLeft="NaN" PositionTop="NaN" Type="Left" Id="VuStatsMonitorWin" />
+    <Window ReadOnly="false" Docked="false" Expanded="false" Open="false" PositionLeft="NaN" PositionTop="NaN" Type="Left" Id="IMWin" />
+    <Window ReadOnly="false" Docked="false" Expanded="false" Open="false" PositionLeft="NaN" PositionTop="NaN" Type="Left" Id="AudioMonitorWin" />
+    <Window ReadOnly="false" Docked="false" Expanded="false" Open="false" PositionLeft="NaN" PositionTop="NaN" Type="Left" Id="VideoWin" />
+    <Window ReadOnly="false" Docked="false" Expanded="false" Open="false" PositionLeft="NaN" PositionTop="NaN" Type="Left" Id="AdvancedSearchContactsWin" />
+    <Window ReadOnly="false" Docked="false" Expanded="false" Open="false" PositionLeft="NaN" PositionTop="NaN" Type="Left" Id="AdvancedSearchContactLogWin" />
+    <Window ReadOnly="false" Docked="false" Expanded="false" Open="false" PositionLeft="NaN" PositionTop="NaN" Type="Left" Id="MainWin" />
+    <Window ReadOnly="false" Docked="false" Expanded="false" Open="false" PositionLeft="NaN" PositionTop="NaN" Type="Left" Id="SystemSettingsWin" />
+    <Window ReadOnly="false" Docked="false" Expanded="false" Open="false" PositionLeft="NaN" PositionTop="NaN" Type="Left" Id="AgentPreferencesWin" />
+  </GeneralUI>
+  <IncomingCall ReadOnly="false" DisplayMainWindow="false" FlashIcon="true" />
+  <IncomingIM ReadOnly="false" DisplayMainWindow="false" DisplayIMWindow="false" FlashIcon="false" />
+  <Tty ReadOnly="false" ShowTTYWindowOnEveryCall="false" ShowTTYWindowFromSpecificCall="false" AlwaysShowTTYButton="false" />
+  <DesktopSharing ReadOnly="false" WindowSize="0" />
+</Preferences>

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ReasonCodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Id="0" IsLeaf="false" ReadOnly="true" Version="2.5.20020.0" xmlns="http://avaya.com/OneXAgent/ObjectModel/ReasonCode">
+  <ReasonCodes Id="1" Label="Break (перерыв)" IsLeaf="true" ReadOnly="true"/>
+  <ReasonCodes Id="2" Label="Dinner (обед)" IsLeaf="true" ReadOnly="true"/>
+  <ReasonCodes Id="3" Label="Training (обучение)" IsLeaf="true" ReadOnly="true"/>
+  <ReasonCodes Id="4" Label="Master (руководитель)" IsLeaf="true" ReadOnly="true"/>
+</ReasonCodes>
