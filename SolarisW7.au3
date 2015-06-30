@@ -9,7 +9,7 @@
 #Include <StaticConstants.au3>
 #include <GuiToolTip.au3> 
 
-Global $Exten=0, $AvayaId=0, $hWnd, $w_width=750, $w_height=480
+Global $Exten=0, $AvayaId=0, $hWnd, $w_width=750, $w_height=480, $OpName=""
 
 _SQLExec("exec SOLARIS_2.dbo.EVENT_LOG_INSERT_v2 " & "'" & @UserName & "','" & @ComputerName & "',DEFAULT,13,DEFAULT,DEFAULT," & "'start solaris'", "event.id")
 
@@ -103,13 +103,20 @@ If StringLen($AvayaID) <> 4 or StringLeft($AvayaID, 1) <> '6' Then
    _Exit()
 EndIf
 
+_SQLExec("exec SOLARIS_2.dbo.GET_OPERATOR_FIO " & "'" & @UserName & "'", "opname.id")
+
+$file = FileOpen(@TempDir & "\opname.id", 0)
+$OpName = StringStripWS (FileReadLine($file, 3), 1)
+
 _WriteLog("Issued Agent ID: " & $AvayaID)
+_WriteLog("Operator Name: " & $OpName)
 
 _XMLSetAttrib('/MyNS:Settings/MyNS:Login/MyNS:Telephony/MyNS:User', 'Station', $Exten)
 _XMLSetAttrib('/MyNS:Settings/MyNS:Login/MyNS:Agent', 'Login', $AvayaId)
 
 IniWrite($sINIFile, "Telephony", "Station DN", " " & $Exten)
 IniWrite($sINIFile, "User", "Agent ID", " " & $AvayaId)
+IniWrite($sINIFile, "Simple Messaging", "Agent Specific Welcome Message", " " & "Здравствуйте, меня зовут " & StringStripWS ($OpName, 2) & ", специалист технической поддержки абонентов Триколор ТВ. Чем я могу Вам помочь?")
 
 ;FileSetAttrib(@AppDataDir & "\Avaya\one-X Agent\2.5\Profiles\default\Settings.xml", "+RS") 
 ;FileSetAttrib(@AppDataDir & "\Avaya\one-X Agent\2.5\Profiles\default\ScreenPops.xml", "+RS") 
