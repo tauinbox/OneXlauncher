@@ -112,6 +112,7 @@ $OpName = StringStripWS (FileReadLine($file, 3), 1)
 
 _WriteLog("Issued Agent ID: " & $AvayaID)
 _WriteLog("Operator Name: " & $OpName)
+_SQLExec("exec SOLARIS_2.dbo.EVENT_LOG_INSERT_v2 " & "'" & @UserName & "','" & @ComputerName & "'," & $Exten & ",13,DEFAULT,DEFAULT," & "'user: " & $OpName & "'", "event.id")
 
 _XMLSetAttrib('/MyNS:Settings/MyNS:Login/MyNS:Telephony/MyNS:User', 'Station', $Exten)
 _XMLSetAttrib('/MyNS:Settings/MyNS:Login/MyNS:Agent', 'Login', $AvayaId)
@@ -123,7 +124,7 @@ IniWrite($sINIFile, "Simple Messaging", "Agent Specific Welcome Message", " " & 
 Choice("Выбор режима работы", "Выберите требуемый режим работы!")
 
 If $Answer = 2 Then
-	_XMLSetAttrib('/MyNS:Settings/MyNS:WorkHandling/MyNS:In', 'AutoIn', 'false')
+	_XMLSetAttrib('/MyNS:Settings/MyNS:WorkHandling/MyNS:Accept', 'AutoAccept', 'false')
 	;MsgBox(4096, "Error", _XMLError ())
 Endif
 
@@ -177,6 +178,12 @@ EndIf
 SplashOff()
 
 $hWnd = WinWait("Avaya one-X Agent", "", 5)
+
+If $Answer = 2 Then
+	_WriteLog("starting EMC...")
+	_SQLExec("exec SOLARIS_2.dbo.EVENT_LOG_INSERT_v2 " & "'" & @UserName & "','" & @ComputerName & "'," & $Exten & ",13,DEFAULT,DEFAULT," & "'starting EMC...'", "event.id")
+	Run("C:\Program Files (x86)\Avaya\Avaya Aura CC Elite Multichannel\Desktop\CC Elite Multichannel Desktop\ASGUIHost.exe", "C:\Program Files (x86)\Avaya\Avaya Aura CC Elite Multichannel\Desktop\CC Elite Multichannel Desktop")
+EndIf
 
 While 1
    If WinExists($hWnd) = 0 Then
