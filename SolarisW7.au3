@@ -7,9 +7,11 @@
 #include <Date.au3>
 #include <WindowsConstants.au3>
 #Include <StaticConstants.au3>
-#include <GuiToolTip.au3> 
+#include <GuiToolTip.au3>
+#Include <GUIConstantsEx.au3>
+#Include <ButtonConstants.au3>
 
-Global $Exten=0, $AvayaId=0, $hWnd, $w_width=750, $w_height=480, $OpName=""
+Global $Exten=0, $AvayaId=0, $hWnd, $w_width=750, $w_height=480, $OpName="", $Answer
 
 _SQLExec("exec SOLARIS_2.dbo.EVENT_LOG_INSERT_v2 " & "'" & @UserName & "','" & @ComputerName & "',DEFAULT,13,DEFAULT,DEFAULT," & "'start solaris'", "event.id")
 
@@ -117,6 +119,13 @@ _XMLSetAttrib('/MyNS:Settings/MyNS:Login/MyNS:Agent', 'Login', $AvayaId)
 IniWrite($sINIFile, "Telephony", "Station DN", " " & $Exten)
 IniWrite($sINIFile, "User", "Agent ID", " " & $AvayaId)
 IniWrite($sINIFile, "Simple Messaging", "Agent Specific Welcome Message", " " & "Здравствуйте, меня зовут " & StringStripWS ($OpName, 2) & ", специалист технической поддержки абонентов Триколор ТВ. Чем я могу Вам помочь?")
+
+Choice("Выбор режима работы", "Выберите требуемый режим работы!")
+
+If $Answer = 2 Then
+	_XMLSetAttrib('/MyNS:Settings/MyNS:WorkHandling/MyNS:In', 'AutoIn', 'false')
+	;MsgBox(4096, "Error", _XMLError ())
+Endif
 
 ;FileSetAttrib(@AppDataDir & "\Avaya\one-X Agent\2.5\Profiles\default\Settings.xml", "+RS") 
 ;FileSetAttrib(@AppDataDir & "\Avaya\one-X Agent\2.5\Profiles\default\ScreenPops.xml", "+RS") 
@@ -275,3 +284,33 @@ Func _CloseAgent()
    EndIf
    BlockInput (0)
 EndFunc
+
+Func Choice($Title, $Note)
+	Local $Btn1ID, $Btn2ID, $msg
+
+	$dWnd = GUICreate($Title, 500, 100)
+
+	GUICtrlCreateIcon('user32.dll', 102, 10, 10)
+	GUICtrlCreateLabel($Note, 60, 20)
+	$Btn1ID = GUICtrlCreateButton("Я принимаю только голосовые вызовы", 10, 60)
+	$Btn2ID = GUICtrlCreateButton("Я дополнительно обрабатываю онлайн чаты", 250, 60)
+
+	GUISetState() ; display the GUI
+
+	Do
+		$msg = GUIGetMsg()
+
+		Select
+			Case $msg = $Btn1ID
+				$Answer = 1
+				Exitloop
+			Case $msg = $Btn2ID
+				$Answer = 2
+				Exitloop			
+			Case $msg = $GUI_EVENT_CLOSE
+				$Answer = 1
+				Exitloop
+		EndSelect
+	Until $msg = $GUI_EVENT_CLOSE
+	GUIDelete($dWnd)
+EndFunc 
