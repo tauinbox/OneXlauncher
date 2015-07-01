@@ -7,7 +7,7 @@
         <CallServerAddress1 ReadOnly="false" Value="192.168.161.6" />
         <CallServerAddresses ReadOnly="false" />
       </Server>
-      <User ReadOnly="false" Station="1300" Password="" SavePassword="false" AutoLogin="false" LoginOverride="false" AutoAnswerSupportRequired="true" LicenseType="Agent" />
+      <User ReadOnly="false" Station="" Password="" SavePassword="false" AutoLogin="false" LoginOverride="false" AutoAnswerSupportRequired="true" LicenseType="Agent" />
       <Type ReadOnly="false" Mode="MyComputer" SelectedPhoneNumberId="" />
       <License Type="Agent" ReadOnly="false" />
       <PhoneNumbers ReadOnly="false" />
