@@ -119,7 +119,7 @@ _XMLSetAttrib('/MyNS:Settings/MyNS:Login/MyNS:Agent', 'Login', $AvayaId)
 
 IniWrite($sINIFile, "Telephony", "Station DN", " " & $Exten)
 IniWrite($sINIFile, "User", "Agent ID", " " & $AvayaId)
-IniWrite($sINIFile, "Simple Messaging", "Agent Specific Welcome Message", " " & "Здравствуйте, меня зовут " & StringStripWS ($OpName, 2) & ", специалист технической поддержки абонентов Триколор ТВ. Чем я могу Вам помочь?")
+IniWrite($sINIFile, "Simple Messaging", "Agent Specific Welcome Message", " " & "Здравствуйте, меня зовут " & StringStripWS ($OpName, 2) & ", специалист технической поддержки абонентов " & '"Триколор ТВ"')
 
 Choice("Выбор режима работы", "Выберите требуемый режим работы!")
 
@@ -182,7 +182,7 @@ $hWnd = WinWait("Avaya one-X Agent", "", 5)
 If $Answer = 2 Then
 	_WriteLog("starting EMC...")
 	_SQLExec("exec SOLARIS_2.dbo.EVENT_LOG_INSERT_v2 " & "'" & @UserName & "','" & @ComputerName & "'," & $Exten & ",13,DEFAULT,DEFAULT," & "'starting EMC...'", "event.id")
-	Run("C:\Program Files (x86)\Avaya\Avaya Aura CC Elite Multichannel\Desktop\CC Elite Multichannel Desktop\ASGUIHost.exe", "C:\Program Files (x86)\Avaya\Avaya Aura CC Elite Multichannel\Desktop\CC Elite Multichannel Desktop")
+	Run("C:\Program Files (x86)\Avaya\Avaya Aura CC Elite Multichannel\Desktop\CC Elite Multichannel Desktop\ASGUIHost.exe", "C:\Program Files (x86)\Avaya\Avaya Aura CC Elite Multichannel\Desktop\CC Elite Multichannel Desktop", @SW_MAXIMIZE)
 EndIf
 
 While 1
