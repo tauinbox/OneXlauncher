@@ -10,8 +10,9 @@
 #include <GuiToolTip.au3>
 #Include <GUIConstantsEx.au3>
 #Include <ButtonConstants.au3>
+#include <MsgBoxConstants.au3>
 
-Global $Exten=0, $AvayaId=0, $hWnd, $w_width=750, $w_height=480, $OpName="", $Answer
+Global $Exten=0, $AvayaId=0, $hWnd, $w_width=750, $w_height=480, $OpName="", $Answer, $OpMode=0
 
 _SQLExec("exec SOLARIS_2.dbo.EVENT_LOG_INSERT_v2 " & "'" & @UserName & "','" & @ComputerName & "',DEFAULT,13,DEFAULT,DEFAULT," & "'start solaris'", "event.id")
 
@@ -128,6 +129,10 @@ If $Answer = 2 Then
 	;MsgBox(4096, "Error", _XMLError ())
 Endif
 
+If $Opmode = 1 Then
+	IniWrite($sINIFile, "Rules", "Rule5", " " & "When LinkedRule Always Do SendKeys CC Elite*,{F10} Then Stop Else Stop")
+EndIf
+
 ;FileSetAttrib(@AppDataDir & "\Avaya\one-X Agent\2.5\Profiles\default\Settings.xml", "+RS") 
 ;FileSetAttrib(@AppDataDir & "\Avaya\one-X Agent\2.5\Profiles\default\ScreenPops.xml", "+RS") 
 
@@ -145,8 +150,10 @@ If Not $hWnd Then
    MsgBox(64, 'SOLARIS', 'Не удалось запустить Avaya One-X Agent', 4)
    _Exit()
    Else
+	  BlockInput(1)
       WinActivate("Добро пожаловать! - Avaya one-X Agent")
 	  Send("{ENTER}")
+	  BlockInput(0)
 EndIf
 
 $hWnd = WinWait("Вход в систему в качестве станции - Avaya one-X Agent", "", 15)
@@ -157,9 +164,11 @@ If Not $hWnd Then
    MsgBox(64, 'SOLARIS', 'Не удалось зарегистрировать станцию', 4)
    _Exit()
    Else
+      BlockInput(1)
       WinActivate("Вход в систему в качестве станции - Avaya one-X Agent")
 	  Send("0000")
 	  Send("{ENTER}")
+	  BlockInput(0)
 EndIf
 
 $hWnd = WinWait("Вход в систему в качестве оператора - Avaya one-X Agent", "", 15)
@@ -170,9 +179,11 @@ If Not $hWnd Then
    MsgBox(64, 'SOLARIS', 'Не удалось зарегистрировать оператора', 4)
    _Exit()
    Else
+      BlockInput(1)
       WinActivate("Вход в систему в качестве оператора - Avaya one-X Agent")
 	  Send($AvayaId)
 	  Send("{ENTER}")
+	  BlockInput(0)
 EndIf
 
 SplashOff()
@@ -293,14 +304,15 @@ Func _CloseAgent()
 EndFunc
 
 Func Choice($Title, $Note)
-	Local $Btn1ID, $Btn2ID, $msg
+	Local $Btn1ID, $Btn2ID, $ChkBox, $msg
 
-	$dWnd = GUICreate($Title, 500, 100)
+	$dWnd = GUICreate($Title, 500, 120)
 
 	GUICtrlCreateIcon('user32.dll', 102, 10, 10)
 	GUICtrlCreateLabel($Note, 60, 20)
 	$Btn1ID = GUICtrlCreateButton("Я принимаю только голосовые вызовы", 10, 60)
 	$Btn2ID = GUICtrlCreateButton("Я дополнительно обрабатываю онлайн чаты", 250, 60)
+	$ChkBox = GUICtrlCreateCheckbox("режим мастера", 180, 90)
 
 	GUISetState() ; display the GUI
 
@@ -310,9 +322,15 @@ Func Choice($Title, $Note)
 		Select
 			Case $msg = $Btn1ID
 				$Answer = 1
+				If _IsChecked($ChkBox) Then
+					$OpMode = 1
+				EndIf
 				Exitloop
 			Case $msg = $Btn2ID
 				$Answer = 2
+				If _IsChecked($ChkBox) Then
+					$OpMode = 1
+				EndIf
 				Exitloop			
 			Case $msg = $GUI_EVENT_CLOSE
 				$Answer = 1
@@ -321,3 +339,7 @@ Func Choice($Title, $Note)
 	Until $msg = $GUI_EVENT_CLOSE
 	GUIDelete($dWnd)
 EndFunc 
+
+Func _IsChecked($idControlID)
+    Return BitAND(GUICtrlRead($idControlID), $GUI_CHECKED) = $GUI_CHECKED
+EndFunc   ;==>_IsChecked
