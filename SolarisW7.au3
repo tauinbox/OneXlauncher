@@ -12,7 +12,7 @@
 #Include <ButtonConstants.au3>
 #include <MsgBoxConstants.au3>
 
-Global $Exten=0, $AvayaId=0, $hWnd, $w_width=750, $w_height=480, $OpName="", $Answer, $OpMode=0
+Global $Exten=0, $AvayaId=0, $hWnd, $hWndPop, $w_width=750, $w_height=480, $OpName="", $ChatState=0, $Answer, $OpMode=0, $Pos, $X, $Y
 
 _SQLExec("exec SOLARIS_2.dbo.EVENT_LOG_INSERT_v2 " & "'" & @UserName & "','" & @ComputerName & "',DEFAULT,13,DEFAULT,DEFAULT," & "'start solaris'", "event.id")
 
@@ -122,11 +122,21 @@ IniWrite($sINIFile, "Telephony", "Station DN", " " & $Exten)
 IniWrite($sINIFile, "User", "Agent ID", " " & $AvayaId)
 IniWrite($sINIFile, "Simple Messaging", "Agent Specific Welcome Message", " " & "Здравствуйте, меня зовут " & StringStripWS ($OpName, 2) & ", специалист технической поддержки абонентов " & '"Триколор ТВ"')
 
+_SQLExec("exec SOLARIS_2.dbo.GET_WEBCHAT_STATE " & "'" & @UserName & "'", "chatstate.id")
+
+$file = FileOpen(@TempDir & "\chatstate.id", 0)
+$ChatState = StringStripWS (FileReadLine($file, 3), 8)
+
+;MsgBox(64, "Chatstate", $ChatState)
+
 Choice("Выбор режима работы", "Выберите требуемый режим работы!")
 
-If $Answer = 2 Then
+If $Answer = 2 And $ChatState = 1 Then
 	_XMLSetAttrib('/MyNS:Settings/MyNS:WorkHandling/MyNS:Accept', 'AutoAccept', 'false')
 	;MsgBox(4096, "Error", _XMLError ())
+ElseIf $Answer = 1 And $ChatState = 1 Then
+	MsgBox(64, "Активен канал обработки чатов", "Для Вас назначена линия обработки чатов, вход в систему возможен только в режиме обработки онлайн чатов")
+	_Exit()
 Endif
 
 If $Opmode = 1 Then
@@ -186,9 +196,28 @@ If Not $hWnd Then
 	  BlockInput(0)
 EndIf
 
+$hWnd = WinWait("Avaya one-X Agent", "", 5)
+
+$hWndPop = WinWait("Информация - Avaya one-X Agent", "", 20)
+WinWaitClose($hWndPop, "", 40)
+
+Sleep(5000)
+
+;MsgBox(64, "test", "Done")
+;ControlClick($hWnd, "", "", "left", 1, 480, 80)
+
+$Pos = WinGetPos($hWnd)
+$X = 480
+$Y = 80
+
 SplashOff()
 
-$hWnd = WinWait("Avaya one-X Agent", "", 5)
+BlockInput(1)
+WinActivate($hWnd)
+MouseClick("left", $Pos[0] + $X, $Pos[1] + $Y)
+BlockInput(0)
+
+Sleep(2000)
 
 If $Answer = 2 Then
 	_WriteLog("starting EMC...")
