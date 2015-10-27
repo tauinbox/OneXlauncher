@@ -131,7 +131,7 @@ $ChatState = StringStripWS (FileReadLine($file, 3), 8)
 
 Choice("Выбор режима работы", "Выберите требуемый режим работы!")
 
-If $Answer = 2 And $ChatState = 1 Then
+If $Answer = 2 Then
 	_XMLSetAttrib('/MyNS:Settings/MyNS:WorkHandling/MyNS:Accept', 'AutoAccept', 'false')
 	;MsgBox(4096, "Error", _XMLError ())
 ElseIf $Answer = 1 And $ChatState = 1 Then
