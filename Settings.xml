@@ -20,7 +20,7 @@
   </Login>
   <WorkHandling ReadOnly="false">
     <In ReadOnly="true" AutoIn="true" />
-    <Accept AutoAccept="true" ReadOnly="false" />
+    <Accept AutoAccept="true" ReadOnly="true" />
     <Complete AutoComplete="true" ReadOnly="true">
       <FollowUp IsTimedFollowUp="true" ReadOnly="false">
         <TimedFollowUp TimerPeriod="10" AllowExtension="false" ReadOnly="false" />
