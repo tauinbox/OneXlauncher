@@ -12,7 +12,8 @@
 #Include <ButtonConstants.au3>
 #include <MsgBoxConstants.au3>
 
-Global $Exten=0, $AvayaId=0, $hWnd, $hWndPop, $w_width=750, $w_height=480, $OpName="", $ChatState=0, $Answer, $OpMode=0, $Pos, $X, $Y
+Global $Exten=0, $AvayaId=0, $hWnd, $hWndPop, $w_width=750, $w_height=480, $OpName="", $ChatState=0, $Answer, $OpMode=0, $ChatGreeting=0, $Pos, $X, $Y, $IsDataCorrect=0
+Global $Greeting, $Ok=0
 
 _SQLExec("exec SOLARIS_2.dbo.EVENT_LOG_INSERT_v2 " & "'" & @UserName & "','" & @ComputerName & "',DEFAULT,13,DEFAULT,DEFAULT," & "'start solaris'", "event.id")
 
@@ -120,28 +121,75 @@ _XMLSetAttrib('/MyNS:Settings/MyNS:Login/MyNS:Agent', 'Login', $AvayaId)
 
 IniWrite($sINIFile, "Telephony", "Station DN", " " & $Exten)
 IniWrite($sINIFile, "User", "Agent ID", " " & $AvayaId)
-IniWrite($sINIFile, "Simple Messaging", "Agent Specific Welcome Message", " " & "Здравствуйте, меня зовут " & StringStripWS ($OpName, 2) & ", специалист технической поддержки абонентов " & '"Триколор ТВ"')
+;IniWrite($sINIFile, "Simple Messaging", "Agent Specific Welcome Message", " " & "Здравствуйте, меня зовут " & StringStripWS ($OpName, 2) & ", специалист технической поддержки абонентов " & '"Триколор ТВ"')
 
-_SQLExec("exec SOLARIS_2.dbo.GET_WEBCHAT_STATE " & "'" & @UserName & "'", "chatstate.id")
+While NOT $IsDataCorrect
+	$Opmode = 0
+	$Greeting = " Здравствуйте, меня зовут " & StringStripWS ($OpName, 2) & ", специалист технической поддержки"
+	_SQLExec("exec SOLARIS_2.dbo.GET_WEBCHAT_STATE_v2 " & "'" & @UserName & "'", "chatstate.id")
 
-$file = FileOpen(@TempDir & "\chatstate.id", 0)
-$ChatState = StringStripWS (FileReadLine($file, 3), 8)
+	$file = FileOpen(@TempDir & "\chatstate.id", 0)
+	$ChatState = StringStripWS (FileReadLine($file, 3), 8)
+	
+	Choice("Выбор режима работы", "Выберите требуемый режим работы!")
+	
+	$ChatState = Number($ChatState)
+
+	If $Answer = 2 Then
+		If $ChatState <> 0 Then
+			_XMLSetAttrib('/MyNS:Settings/MyNS:WorkHandling/MyNS:Accept', 'AutoAccept', 'false')
+		EndIf
+		If $ChatState = 0 Then
+			If _IsItOk("Кажется, что-то пошло не так", "Мы обнаружили расхождение выбранного Вами режима работы с подключенными Вам каналами обслуживания. Вы выбрали режим работы с чатами, хотя нам не удалось обнаружить ни одной активной линии чатов, назначенной для Вас." & @CR & @CR & "К сожалению, ЭВМ тоже иногда ошибается, поэтому подскажите, как следует поступить в данной ситуации?") Then
+				_XMLSetAttrib('/MyNS:Settings/MyNS:WorkHandling/MyNS:Accept', 'AutoAccept', 'false')
+				$IsDataCorrect = 1
+			EndIf
+		ElseIf $ChatState = 1 Then
+			If $ChatGreeting = 0 Then
+				$Greeting = " Здравствуйте, меня зовут " & StringStripWS ($OpName, 2) & ", специалист технической поддержки абонентов " & '"Триколор ТВ"'
+				$IsDataCorrect = 1
+			EndIf
+			If $ChatGreeting <> 0 Then
+				If _IsItOk("Кажется, что-то пошло не так", "Вам не назначена линия обработки чатов по каналу GS Gamekit, хотя Вы пытаетесь зарегистрироваться в системе с указанием данной опции." & @CR & @CR & "К сожалению, ЭВМ тоже иногда ошибается, поэтому подскажите, как следует поступить в данной ситуации?") Then
+					$IsDataCorrect = 1
+				EndIf
+			EndIf
+		ElseIf $ChatState = 10 Then
+			If $ChatGreeting = 1 Then
+				$Greeting = " Здравствуйте. Служба поддержки GS Gamekit. Меня зовут " & StringStripWS ($OpName, 2)
+				$IsDataCorrect = 1
+			EndIf
+			If $ChatGreeting <> 1 Then
+				If _IsItOk("Кажется, что-то пошло не так", "Для Вас назначена линия обработки чатов по каналу GS Gamekit, хотя Вы пытаетесь зарегистрироваться в системе без указания данной опции." & @CR & @CR & "К сожалению, ЭВМ тоже иногда ошибается, поэтому подскажите, как следует поступить в данной ситуации?") Then
+					$IsDataCorrect = 1
+				EndIf
+			EndIf
+		EndIf
+		;MsgBox(4096, "Error", _XMLError ())
+	ElseIf $Answer = 1 Then
+		_XMLSetAttrib('/MyNS:Settings/MyNS:WorkHandling/MyNS:Accept', 'AutoAccept', 'true')
+		If $ChatState <> 0 Then
+			If _IsItOk("Кажется, что-то пошло не так", "Для Вас назначена линия обработки чатов, хотя Вы пытаетесь зарегистрироваться в системе без возможности обработки чатов." & @CR & @CR & "К сожалению, ЭВМ тоже иногда ошибается, поэтому подскажите, как следует поступить в данной ситуации?") Then
+				;MsgBox(64, "Активен канал обработки чатов", "Для Вас назначена линия обработки чатов, вход в систему возможен только в режиме обработки онлайн чатов")
+				$IsDataCorrect = 1
+			EndIf
+		ElseIf $ChatState = 0 Then
+			$IsDataCorrect = 1
+		EndIf
+	Endif
+
+	If $Opmode = 1 Then
+		IniWrite($sINIFile, "Rules", "Rule5", " " & "When LinkedRule Always Do SendKeys CC Elite*,{F10} Then Stop Else Stop")
+	Else
+		IniWrite($sINIFile, "Rules", "Rule5", " " & "When LinkedRule Always Do SendKeys CC Elite*,{F11} Then Stop Else Stop")
+	EndIf
+	
+	IniWrite($sINIFile, "Simple Messaging", "Agent Specific Welcome Message", $Greeting)
+WEnd
 
 ;MsgBox(64, "Chatstate", $ChatState)
 
-Choice("Выбор режима работы", "Выберите требуемый режим работы!")
-
-If $Answer = 2 Then
-	_XMLSetAttrib('/MyNS:Settings/MyNS:WorkHandling/MyNS:Accept', 'AutoAccept', 'false')
-	;MsgBox(4096, "Error", _XMLError ())
-ElseIf $Answer = 1 And $ChatState = 1 Then
-	MsgBox(64, "Активен канал обработки чатов", "Для Вас назначена линия обработки чатов, вход в систему возможен только в режиме обработки онлайн чатов")
-	_Exit()
-Endif
-
-If $Opmode = 1 Then
-	IniWrite($sINIFile, "Rules", "Rule5", " " & "When LinkedRule Always Do SendKeys CC Elite*,{F10} Then Stop Else Stop")
-EndIf
+;_Exit()
 
 ;FileSetAttrib(@AppDataDir & "\Avaya\one-X Agent\2.5\Profiles\default\Settings.xml", "+RS") 
 ;FileSetAttrib(@AppDataDir & "\Avaya\one-X Agent\2.5\Profiles\default\ScreenPops.xml", "+RS") 
@@ -333,15 +381,16 @@ Func _CloseAgent()
 EndFunc
 
 Func Choice($Title, $Note)
-	Local $Btn1ID, $Btn2ID, $ChkBox, $msg
+	Local $Btn1ID, $Btn2ID, $ChkBox_is_Master, $ChkBox_GameConsole, $msg
 
-	$dWnd = GUICreate($Title, 500, 120)
+	$dWnd = GUICreate($Title, 520, 140)
 
 	GUICtrlCreateIcon('user32.dll', 102, 10, 10)
 	GUICtrlCreateLabel($Note, 60, 20)
 	$Btn1ID = GUICtrlCreateButton("Я принимаю только голосовые вызовы", 10, 60)
 	$Btn2ID = GUICtrlCreateButton("Я дополнительно обрабатываю онлайн чаты", 250, 60)
-	$ChkBox = GUICtrlCreateCheckbox("режим мастера", 180, 90)
+	$ChkBox_GameConsole = GUICtrlCreateCheckbox('а еще я обслуживаю чаты "игровой консоли"', 250, 90)
+	$ChkBox_is_Master = GUICtrlCreateCheckbox("режим мастера (конечно же, я знаю, что это)", 250, 110)
 
 	GUISetState() ; display the GUI
 
@@ -351,18 +400,22 @@ Func Choice($Title, $Note)
 		Select
 			Case $msg = $Btn1ID
 				$Answer = 1
-				If _IsChecked($ChkBox) Then
+				If _IsChecked($ChkBox_is_Master) Then
 					$OpMode = 1
 				EndIf
 				Exitloop
 			Case $msg = $Btn2ID
 				$Answer = 2
-				If _IsChecked($ChkBox) Then
+				If _IsChecked($ChkBox_is_Master) Then
 					$OpMode = 1
 				EndIf
+				If _IsChecked($ChkBox_GameConsole) Then
+					$ChatGreeting = 1
+				EndIf				
 				Exitloop			
 			Case $msg = $GUI_EVENT_CLOSE
 				$Answer = 1
+				_Exit()
 				Exitloop
 		EndSelect
 	Until $msg = $GUI_EVENT_CLOSE
@@ -372,3 +425,34 @@ EndFunc
 Func _IsChecked($idControlID)
     Return BitAND(GUICtrlRead($idControlID), $GUI_CHECKED) = $GUI_CHECKED
 EndFunc   ;==>_IsChecked
+
+Func _IsItOk($Title, $Note)
+	Local $Btn1ID, $Btn2ID
+
+	$dWnd = GUICreate($Title, 520, 140)
+
+	GUICtrlCreateIcon('user32.dll', 102, 10, 10)
+	GUICtrlCreateLabel($Note, 60, 20, 450, 80)
+	$Btn1ID = GUICtrlCreateButton("Да, всё в порядке, продолжаем", 10, 110)
+	$Btn2ID = GUICtrlCreateButton("Я, кажется, что-то напутал, попробую заново", 250, 110)
+
+	GUISetState() ; display the GUI
+
+	Do
+		$msg = GUIGetMsg()
+
+		Select
+			Case $msg = $Btn1ID
+				$Ok = 1
+				Exitloop
+			Case $msg = $Btn2ID
+				$Ok = 0
+				Exitloop			
+			Case $msg = $GUI_EVENT_CLOSE
+				_Exit()
+				Exitloop
+		EndSelect
+	Until $msg = $GUI_EVENT_CLOSE
+	GUIDelete($dWnd)
+	Return $Ok
+EndFunc 
