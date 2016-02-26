@@ -390,7 +390,7 @@ Func Choice($Title, $Note)
 	$Btn1ID = GUICtrlCreateButton("Я принимаю только голосовые вызовы", 10, 60)
 	$Btn2ID = GUICtrlCreateButton("Я дополнительно обрабатываю онлайн чаты", 250, 60)
 	$ChkBox_GameConsole = GUICtrlCreateCheckbox('а еще я обслуживаю чаты "игровой консоли"', 250, 90)
-	$ChkBox_is_Master = GUICtrlCreateCheckbox("режим мастера (конечно же, я знаю, что это)", 250, 110)
+	$ChkBox_is_Master = GUICtrlCreateCheckbox("режим мастера (конечно же, я знаю что это)", 250, 110)
 
 	GUISetState() ; display the GUI
 
