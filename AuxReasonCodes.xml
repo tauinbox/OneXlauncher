@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
-<ReasonCodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Id="0" IsLeaf="false" ReadOnly="true" Version="2.5.20020.0" xmlns="http://avaya.com/OneXAgent/ObjectModel/ReasonCode">
-  <ReasonCodes Id="1" Label="Break (перерыв)" IsLeaf="true" ReadOnly="true"/>
-  <ReasonCodes Id="2" Label="Dinner (обед)" IsLeaf="true" ReadOnly="true"/>
-  <ReasonCodes Id="3" Label="Training (обучение)" IsLeaf="true" ReadOnly="true"/>
-  <ReasonCodes Id="4" Label="Master (руководитель)" IsLeaf="true" ReadOnly="true"/>
+<ReasonCodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Id="0" IsLeaf="false" ReadOnly="true" DefaultGuid="b358f186-f0f3-4928-95a2-16421548996e" Version="2.5.20020.0" xmlns="http://avaya.com/OneXAgent/ObjectModel/ReasonCode">
+  <ReasonCodes Id="1" Label="Break (перерыв)" IsLeaf="true" ReadOnly="true" Guid="d69c854e-2b80-40b2-8261-72ce346b0484" />
+  <ReasonCodes Id="2" Label="Dinner (обед)" IsLeaf="true" ReadOnly="true" Guid="eed5136e-c1e6-42b1-b74a-d11dbbd9cb94" />
+  <ReasonCodes Id="3" Label="Training (обучение)" IsLeaf="true" ReadOnly="true" Guid="bde8fc50-7454-45f2-ac0e-7a006fc632f6" />
+  <ReasonCodes Id="4" Label="Master (руководитель)" IsLeaf="true" ReadOnly="true" Guid="1236438e-399c-40bc-8eea-9b298b165a33" />
+  <ReasonCodes Id="5" Label="Coacing (наставничество)" IsLeaf="true" ReadOnly="true" Guid="1236438e-399c-40bc-8eea-9b298b165a33" />
+  <ReasonCodes Id="10" Label="default" IsLeaf="true" ReadOnly="false" Guid="b358f186-f0f3-4928-95a2-16421548996e" />
+  <ReasonCodes Id="0" Label="sys-default" IsLeaf="true" ReadOnly="false" Guid="04d2fb5e-8166-41b2-b328-09e690d89646" />
 </ReasonCodes>
