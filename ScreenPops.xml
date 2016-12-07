@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <ScreenPops xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ReadOnly="false" Version="2.5.20020.0" xmlns="http://avaya.com/OneXAgent/ScreenPop">
-  <ScreenPop Name="Без заголовка" Url="&quot;C:\Program Files (x86)\Google\Chrome\Application\chrome-new-wd&quot;" TriggerOnlyForVdn="false" Vdn="" Trigger="InboundVoice_Answered" Selected="true" Params="http://OperatorScript/OpenInput/vdn=%v/phone=%m/system=4" ReadOnly="false" />
+  <ScreenPop Name="Без заголовка" Url="&quot;C:\Program Files\Internet Explorer\IEXPLORE.EXE&quot;" TriggerOnlyForVdn="false" Vdn="" Trigger="InboundVoice_Answered" Selected="true" Params="http://upiter:8089/Underway.aspx/StartAvaya/%v/%m/4" ReadOnly="false" />
 </ScreenPops>
