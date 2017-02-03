@@ -340,7 +340,7 @@ Func _CalcExten()
 	  $Exten = "5" & $Numb
 	  Return  $Exten
    ; MsgBox(64, "SOLARIS", $Octet)
-   Case $Octet = "020"
+   Case $Octet = "021"
 	  $Exten = StringMid($CName, 6, 3) + 1200
 	  Return  $Exten
    Case Else
